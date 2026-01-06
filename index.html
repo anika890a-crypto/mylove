@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Konika ❤️ Anika Memories</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali&display=swap" rel="stylesheet">
+<style>
+body {
+    font-family: 'Noto Sans Bengali', sans-serif;
+    background: linear-gradient(135deg,#ffe3e3,#ffd9e8);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    margin:0;
+    overflow-x:hidden;
+    position:relative;
+}
+.container-custom {
+    max-width:700px;
+    width:95%;
+    margin:50px auto;
+    position:relative;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 15px 50px rgba(0,0,0,0.3);
+    text-align:center;
+    padding:30px;
+}
+.page-content {
+    display:none;
+}
+.page-content.active {
+    display:block;
+    animation:fadeIn 1s ease-in-out;
+}
+@keyframes fadeIn {
+    from {opacity:0;}
+    to {opacity:1;}
+}
+.photo-container {
+    width:100%;
+    height:70vh;
+    background-size:cover;
+    background-position:center;
+    border-radius:20px;
+    transition:1s ease-in-out;
+}
+.message {
+    margin-top:15px;
+    font-size:18px;
+    line-height:1.6;
+    color:#ff4d6d;
+}
+.nextBtn {
+    margin-top:20px;
+}
+
+/* Floating hearts */
+.heart {
+    position: absolute;
+    font-size: 16px;
+    color: rgba(255,77,109,0.6);
+    animation: float 6s linear infinite;
+    pointer-events: none;
+    user-select: none;
+}
+@keyframes float {
+    0% { transform: translateY(100vh) scale(0); opacity:0;}
+    20% { opacity:1;}
+    100% { transform: translateY(-10vh) scale(1); opacity:0;}
+}
+</style>
+</head>
+<body>
+
+<audio id="music" loop>
+  <source src="song/romanticsong.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container container-custom">
+
+  <!-- Intro Pages -->
+  <div id="introPages">
+    <div class="page-content active" data-index="0">
+      <div class="message">প্রতি মুহূর্তে তোমার কথা আমার মনে পড়ে… ❤️</div>
+      <button class="btn btn-danger nextBtn">পরবর্তী</button>
+    </div>
+    <div class="page-content" data-index="1">
+      <div class="message">ভাবছি, আমাদের স্মৃতিগুলো কতই না সুন্দর ছিল.. 🌸</div>
+      <button class="btn btn-danger nextBtn">পরবর্তী</button>
+    </div>
+    <div class="page-content" data-index="2">
+      <div class="message">আমার প্রতিটি মুহূর্ত তোমার সঙ্গে অমূল্য। 💕</div>
+      <button class="btn btn-danger nextBtn">পরবর্তী</button>
+    </div>
+    <div class="page-content" data-index="3">
+      <div class="message">এই গল্পটা শুধু আমাদের…😍</div>
+      <button class="btn btn-danger nextBtn">পরবর্তী</button>
+    </div>
+    <div class="page-content" data-index="4">
+      <div class="message">চলো, আমাদের পুরনো স্মৃতিগুলো তোমাকে মনে করিয়ে দিই… ✨</div>
+      <button class="btn btn-danger nextBtn">পরবর্তী</button> 
+    </div>
+    <div class="page-content" data-index="5">
+      <div class="message">জানো..!প্রতিটি ছবি আমাদের ভালোবাসার গল্প বলে… 💖</div>
+      <button class="btn btn-danger nextBtn">পরবর্তী</button>
+    </div>
+    <div class="page-content" data-index="6">
+      <div class="message">আচ্ছা চলো, এখন তোমাকে আমাদের হাজারো স্মৃতির মাঝে অল্প কিছু স্মৃতি দেখাই… 🎬</div>
+      <button class="btn btn-danger nextBtn">শুরু করো</button>
+    </div>
+  </div> 
+
+  <!-- Slideshow Page -->
+  <div id="slideshowPage" class="page-content">
+    <div id="photo" class="photo-container"></div>
+    <div id="message" class="message"></div>
+    <button id="nextPhotoBtn" class="btn btn-danger nextBtn">➡ পরবর্তী মুহূর্ত দেখো… </button>
+  </div>
+
+</div>
+
+<script>
+const music = document.getElementById('music');
+document.body.addEventListener('click',()=>{music.play();},{once:true});
+
+// Floating hearts
+setInterval(() => {
+    const h = document.createElement('div');
+    h.className = 'heart';
+    h.innerText = '❤️';
+    h.style.left = Math.random() * 100 + 'vw';
+    h.style.fontSize = 14 + Math.random() * 20 + 'px';
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 6000);
+}, 400);
+
+// Intro Page Logic
+const introPages = document.querySelectorAll('#introPages .page-content');
+let introIndex = 0;
+
+introPages.forEach(page => {
+  const btn = page.querySelector('.nextBtn');
+  btn.addEventListener('click',()=>{
+    page.classList.remove('active');
+    introIndex++;
+    if(introIndex < introPages.length){
+      introPages[introIndex].classList.add('active');
+    } else {
+      document.getElementById('introPages').style.display='none';
+      document.getElementById('slideshowPage').classList.add('active');
+      showImage(0);
+    }
+  });
+});
+
+// Slideshow Logic
+const images = [
+  'img/gf1.jpg','img/gf2.jpg','img/gf3.jpg','img/gf4.jpg','img/gf5.jpg',
+  'img/gf6.jpg','img/gf7.jpg','img/gf8.jpg','img/gf9.jpg','img/gf10.jpg'
+];
+const messages = [
+  'ফেসবুকে দেখা সকল ছবির মাঝে, এই এক ফ্রেমেই আমি মুগ্ধ হয়ে থমকে গিয়েছিলাম। এইখান থেকেই শুরু হয়েছিল তোমার জন্য আমার অনুভূতি, প্রথমবার তোমাকে দেখে মনের মাঝে শুরু হওয়া  আমার সেই নীরব ভালোবাসা তুমি ❤️',
+  'প্রথমবার তোমাকে শাড়িতে দেখা…😍😘উফফ কি বর্ণনা দিবো আমি এটার..?এত অপরূপ তুমি, চোখের শান্তি যেন তুমি, তোমার এই হাসি যেন আমার  হৃদয়ের সকল দুঃখ মুছে দেয়। 🌸',
+  'তোমার কি মনে আছে? দেখা হওয়ার পর প্রথম ছবি আমাদের এটা, প্রথমবার তোমার হাত ধরে ছবি তুলেছিলাম। আজও সেই মুহূর্ত ঠিক আগের মতোই হৃদয়ে গাথা  আছে যা কোনোদিন ভোলার নয় ❤️💕',
+  'তোমাকে দেখেই আমার আত্না তৃপ্ত হয়, তোমাকে দেখার পিপাসা আমার কোনোদিন মিটবে না পাখি😍,তোমাকে দেখলেই নতুন করে আবার তোমার প্রেমে পরি 💕',
+  'মেট্রো ট্রেনে তোমার হাত শক্ত করে ধরে রেখেছিলাম… কোথাও বের হলেই আমার মনে হতো,সারাক্ষণ তোমার হাত ধরে রাখি— যেন তুমি ছুটে না যাও, হারিয়ে না যাও ❤️ আর আজীবন তোমার এই হাত আমার কীবোর্ড এর পাতায় থেকে যাবে পাখি, আমার এই ওয়াদা কোনোদিন ভুলবো না আমি 💖',
+  'আমি আর তুমি…দেখো তো, আমাদের কেমন  মানিয়েছে আমাদের 💑সাথে থাকার প্রতিটি মুহূর্ত আমার কাছে অমূল্য 😊❤️, তোমার পাশে দাঁড়িয়ে আমি শিখেছিলাম,ভালোবাসা আসলে কতটা নীরব আর সুন্দর 💖✨',
+  'তুমি আমার জীবনের সবচেয়ে সুন্দর গিফট। 🎁',
+  'তুমি আমার জীবনের সবচেয়ে সুন্দর গল্প।💕তুমি ছাড়া আমার জীবন অসম্পূর্ণ। আমার লক্কী বউ 😍  Love you, bow ❤️ 👫',
+  'কিছু মুহূর্ত কথা বলে না,তবুও সবকিছু বলে দেয়, তুমি যখন পাশে থাকো,তখন সাধারণ মুহূর্তগুলোও অসাধারণ হয়ে যায় , আমার ভালোবাসা শুধুই তোমার জন্য। 💌',
+  'প্রতিটি ছবিতে আমাদের গল্প লেখা আছে। চিরকাল আমার হয়ে থেকো, এই ভালোবাসার গল্প কখনো শেষ না হোক 💕😍 📸'
+];
+
+let slideIndex = 0;
+const photo = document.getElementById('photo');
+const message = document.getElementById('message');
+const nextPhotoBtn = document.getElementById('nextPhotoBtn');
+
+function showImage(i){
+    photo.style.backgroundImage = `url('${images[i]}')`;
+    message.innerText = messages[i];
+}
+
+nextPhotoBtn.addEventListener('click',()=>{
+    slideIndex = (slideIndex+1) % images.length;
+    showImage(slideIndex);
+});
+
+// Initial setup
+photo.style.backgroundImage = `url('${images[0]}')`;
+message.innerText = messages[0];
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
